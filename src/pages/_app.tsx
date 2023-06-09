@@ -1,15 +1,16 @@
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import '../styles/globals.css'
-import { Urbanist } from 'next/font/google';
+import { store } from '../redux/store'
+import { Provider } from 'react-redux'
 
-
-const urbanist = Urbanist({ subsets: ['latin'] });
 
 function MyApp({ Component, pageProps }: any) {
   return (
     <UserProvider>
+      <Provider store={store}>
           <Component {...pageProps} />
+      </Provider>
     </UserProvider>
 
   )

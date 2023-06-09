@@ -1,10 +1,23 @@
+import { useState, useEffect } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
 
+// Imported Components 
+import NavBar from '@/components/NavBar';
+import Home from '@/components/Home';
+import ContentManagement from '@/components/ContentManagement'
+import AccountManagement from '@/components/AccountManagement'
 
-export default function Home() {
+export default function Dashboard() {
   const { user, isLoading, error } = useUser();
   const router = useRouter();
+  const dispatch = useDispatch();
+
+
+  // UI Related Functions
+
+  // UI Related Functions
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
@@ -15,15 +28,9 @@ export default function Home() {
   }
 
   return (
-      <div className="bg-white dark:bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24">
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <a href="/api/auth/logout">
-          <button className='bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'>Logout</button>
-        </a>
-        <a href="/profile">
-          <button className='bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'>Profile</button>
-        </a>
+      <div className="bg-weird flex min-h-screen flex-col items-center justify-start">
+        <NavBar />
+        <Home />
       </div>
 
   )

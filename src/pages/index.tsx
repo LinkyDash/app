@@ -2,6 +2,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { Exo_2, Oswald } from 'next/font/google';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const exo = Exo_2({
   weight: '800',
@@ -40,12 +41,12 @@ export default function Home() {
         </div>
         <p className='font-helvetica font-thin text-8xl text-center'>Unite your world,<br></br><span className='font-helvetica font-extrabold'>effortlessly</span></p>
         <div className='w-1/3 flex justify-between'>
-          <a href="/api/auth/login">
+          <Link href="/api/auth/login">
             <button className='font-helvetica bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  rounded text-2xl'>Login</button>
-          </a>
-          <a href="#">
+          </Link>
+          <Link href="#">
             <button className='font-helvetica bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-70 cursor-not-allowed cursor text-2xl'>Sign Up FOR FREE</button>
-          </a>
+          </Link>
         </div>
       </div>
 

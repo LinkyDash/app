@@ -14,6 +14,9 @@ module.exports = {
       colors: {
         shibi: '#12DFDD',
         zerak: '#0A86D9',
+        weird: '#DFE3F7',
+        looksLikeWhite: '#f6f5f4',
+        roseGold: '#E7DFDB'
       },
       fontFamily: {
         'helvetica': ['Helvetica', 'Arial', 'sans-serif'],
