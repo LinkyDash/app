@@ -7,7 +7,7 @@ const axios = require('axios');
 const multer  = require('multer')
 
 const storage = multer.diskStorage({
-    destination: './public/tmp/uploads/',
+    destination: './tmp/',
     filename: (_req: any, file: any, cb: any) => cb(null, file.originalname),
 });
 
@@ -76,7 +76,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
                 const absoluteURL = `http://localhost:3000/tmp/uploads/${relativePath}`;
                 console.log(absoluteURL);
                 
-                await axios.post(
+                /* await axios.post(
                 `https://graph.facebook.com/v17.0/${pageid}/photos?url=${absoluteURL}&access_token=${token}`
                 ).then(function (response:{data: any}) {
                     res.status(200).json({ success: true });
@@ -86,7 +86,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
                 }).finally( function (){
                     // Delete the temporary image file
                     fs.unlinkSync(imagePath);
-                })
+                }) */
             } catch (error) {
                 console.error('Error uploading post', error);
                 res.status(500).json({ error: 'An error occurred while uploading the post' });
