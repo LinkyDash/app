@@ -7,17 +7,17 @@ const axios = require('axios');
 const multer  = require('multer')
 
 const storage = multer.diskStorage({
-    destination: './public/uploads/',
+    destination: './public/tmp/uploads/',
     filename: (_req: any, file: any, cb: any) => cb(null, file.originalname),
 });
 
 const upload = multer({ storage });
 
-/* export const config = {
+export const config = {
     api: {
         bodyParser: false
     }
-}; */
+};
 
 export default withApiAuthRequired(async function myApiRoute(req: any, res) {
   // @ts-ignore
@@ -73,7 +73,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
             try {
                 const imagePath = req.file.path;
                 const relativePath = path.basename(imagePath);
-                const absoluteURL = `https://www.linkydash.com/${relativePath}`;
+                const absoluteURL = `http://localhost:3000/tmp/uploads/${relativePath}`;
                 console.log(absoluteURL);
                 
                 await axios.post(
