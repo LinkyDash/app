@@ -41,22 +41,32 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
     }
 
     if (req.method === 'POST') {
-        const {fileurl, pageid} = req.headers as { [key: string]: string };
+        const {fileurl, pageid, type} = req.headers as { [key: string]: string };
         const cursor = await dbClient.getUser(user.sub);
         const dbUser = cursor[0];
         const page = dbUser.facebookApi.pages.filter((el: any) => el.id === pageid)
         const token = page[0].access_token
         console.log(fileurl, pageid);
-        
-        await axios.post(
-        `https://graph.facebook.com/v17.0/${pageid}/photos?url=${fileurl}&access_token=${token}`
-        ).then(function (response:{data: any}) {
-            res.status(200).json({ success: true });
-        }).catch(function (error: {}) {
-            console.log(error);
-            res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
-        })
 
+        if (type === 'image') {
+            await axios.post(
+            `https://graph.facebook.com/v17.0/${pageid}/photos?url=${fileurl}&access_token=${token}`
+            ).then(function (response:{data: any}) {
+                res.status(200).json({ success: true });
+            }).catch(function (error: {}) {
+                console.log(error);
+                res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
+            })
+        } else {
+            await axios.post(
+            `https://graph.facebook.com/v17.0/${pageid}/feed?message=${fileurl}&access_token=${token}`
+            ).then(function (response:{data: any}) {
+                res.status(200).json({ success: true });
+            }).catch(function (error: {}) {
+                console.log(error);
+                res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
+            })
+        }
     } else {
         // Handle unsupported HTTP methods
         res.status(405).json({ error: 'Method Not Allowed' });

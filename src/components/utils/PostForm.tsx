@@ -81,8 +81,18 @@ export default function PostForm() {
                 <button onClick={handleClick} value={'text'} className={postType === 'text'? 'bg-looksLikeWhite p-2 m-2 border-2 border-blue-700 rounded-xl w-1/2 shadow-md font-medium':'w-1/2 bg-white p-2 m-2 border rounded-xl font-medium'}>Text</button>
             </div>
             <form onSubmit={handleSubmit} encType="multipart/form-data" className='flex flex-col mt-5'>
-            <label className='pl-2'>Media URL</label>
-            <input value={fileUrl} required type="text" onChange={handleFileChange} className='m-3 w-1/2 rounded-md border mt-1 h-8 pl-2'/>
+            {
+                postType === 'image' ?
+                <div className='flex flex-col mx-8'>
+                    <label className='pl-2'>Media URL</label>
+                    <input value={fileUrl} required type="text" onChange={handleFileChange} className='m-3 w-1/2 rounded-md border mt-1 h-8 pl-2'/>
+                </div>
+                :
+                <div className='flex flex-col mx-8'>
+                    <label className='pl-2'>Post Text</label>
+                    <textarea value={fileUrl} required onChange={handleFileChange} className='m-3 rounded-md border mt-1 h-8 pl-2 max-h-72'/>
+                </div>         
+            }
             <button disabled={isLoading} type="submit" className={`bg-red-500 hover:bg-red-600 text-white font-semibold p-3 rounded-lg w-1/3 mx-auto mt-5 ${isLoading? 'bg-red-200 hover:bg-red-200 cursor-not-allowed':''}`}>
                 {isLoading ? 'Uploading...' : 'Upload and Post'}
             </button>
