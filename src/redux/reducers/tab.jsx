@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const tabSlice = createSlice({
   name: 'tab',
-  initialState: {activeTab: null},
+  initialState: {name: 'Home'},
   reducers: {
     activeTab: (state, action) => {
-        state = {activeTab: action.payload};
+        state = {name: action.payload};
         return state;
     },
   },

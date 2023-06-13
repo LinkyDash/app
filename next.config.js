@@ -4,6 +4,16 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 's.gravatar.com',
+      },
+      {
+        hostname: '*.fbcdn.net'
+      },
+    ],
+  }
 }
 
 module.exports = nextConfig

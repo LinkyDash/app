@@ -1,36 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import DropDowns from './utils/DropDowns';
-import { setPage, endPageRequest } from '@/redux/reducers/page';
-import { updatePages } from '@/redux/reducers/pages';
 import axios from 'axios';
+import { setPage, endPageRequest } from '@/redux/reducers/page';
+import Image from 'next/image';
 
-
-export default function Home() {
-
-  const dispatch = useDispatch();
+export default function FacebookTab() {
 
   // React states
-  const [insight, setInsight] = useState({})
+  const [posts, setPosts] = useState({posts: []})
   const [reload, setReload] = useState({})
   // React states
+
+  const dispatch = useDispatch();
 
   // Redux States
   const tab = useSelector((state: {tab: any}) => state.tab);
   const page = useSelector((state: {page: any}) => state.page);
   const time = useSelector((state: {time: any}) => state.time);
-  const pages = useSelector((state: {pages: any}) => state.pages);
   // Redux States
 
-  useEffect(() => {
+    useEffect(() => {
     const headers = {
       pageid: page.id,
       time: JSON.stringify(time),
     };
     if (page.name) {
-      axios.get('/api/insight', { headers })
+      axios.get('/api/facebook', { headers })
         .then(function (response:{data: any}) {
-          setInsight(response.data);
+          setPosts(response.data);
         })
         .catch(function (error: {}) {
           console.log(error);
@@ -41,8 +39,7 @@ export default function Home() {
   }, [page, time]);
 
   return (
-    <div className={` w-full ${tab.name === 'Home'? 'visible' : 'hidden'} `}>
-      
+    <div className={` w-full ${tab.name === 'Content Management'? 'visible' : 'hidden'}`}>
       <div className={page.status? 'm-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden':'m-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5'}>
         <div role="status" className='flex justify-center'>
           <div>
@@ -56,42 +53,39 @@ export default function Home() {
       </div>
       <div className={page.status? 'm-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5':'m-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden'}>
         <DropDowns />
-        <div className='p-2'>
-          <div className='flex justify-around mb-8'>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Messages</h1>
-              <h1 className='text-center text-2xl font-bold p-5'>{insight.messages}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
-
-            </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Comments</h1>
-              <h1 className='text-center text-2xl font-bold p-5'>{insight.comments}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
-
-            </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>New Posts</h1>
-              <h1 className='text-center text-2xl font-bold p-5'>{insight.posts}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
-
-            </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Impressions</h1>
-              <h1 className='text-center text-2xl font-bold p-5'>{insight.impressions}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
-
-            </div>
-          </div>
-          <div className='flex'>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/2'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Audience Sentiment Status</h1>
-              <div className='m-5 p-5 rounded-lg bg-white text-center h-52'>No Data Available</div>
+        <div className='flex justify-around'>
+          <div className='w-1/2 m-5 p-2 bg-white shadow-2xl  rounded-xl'>hello</div>
+          <div className='w-1/2 m-5 p-2 bg-white shadow-2xl rounded-xl max-h-200 '>
+            <div className="overflow-auto h-costume">
+              <div className="flex flex-wrap">
+                {posts.posts.map((el: { id: string, full_picture: string }) => {
+                  const strDate = el.updated_time;
+                  const date = new Date(strDate)
+                  const options = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};
+                  const formattedDate = date.toLocaleString('en-US', options);
+                  return (
+                    <div key={el.id} className="p-2 rounded-xl bg-looksLikeWhite m-2 w-5/10.5 shadow-lg">
+                      <h1 className='text-right my-5 font-semibold text-sm'>{formattedDate}</h1>
+                      {
+                        el.full_picture ? 
+                        <Image src={el.full_picture}
+                        alt="facebook post picture"
+                        width={200} height={200}
+                        className='mx-auto border rounded-xl'
+                        />
+                        :
+                        ''
+                      }
+                      
+                      <h1 className='text-center mt-5 font-semibold'>{el.message}</h1>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   )
 }

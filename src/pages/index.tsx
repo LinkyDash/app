@@ -45,7 +45,7 @@ export default function Home() {
             <button className='font-helvetica bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  rounded text-2xl'>Login</button>
           </Link>
           <Link href="#">
-            <button className='font-helvetica bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-70 cursor-not-allowed cursor text-2xl'>Sign Up FOR FREE</button>
+            <button  className='font-helvetica bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-70 cursor-not-allowed cursor text-2xl'>Sign Up FOR FREE</button>
           </Link>
         </div>
       </div>

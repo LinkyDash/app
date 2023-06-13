@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const tabsSlice = createSlice({
   name: 'tabs',
-  initialState: [],
+  initialState: ['Home'],
   reducers: {
     openTab: (state, action) => {
         state = [...state, action.payload];

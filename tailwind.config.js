@@ -20,6 +20,12 @@ module.exports = {
       },
       fontFamily: {
         'helvetica': ['Helvetica', 'Arial', 'sans-serif'],
+      },
+      spacing: {
+        '5/10.5': '47.5%',
+      },
+      height: {
+        'costume': '640px',
       }
     },
   },
