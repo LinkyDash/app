@@ -73,7 +73,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
             try {
                 const imagePath = req.file.path;
                 const relativePath = path.basename(imagePath);
-                const absoluteURL = `https://https://www.linkydash.com/${relativePath}`;
+                const absoluteURL = `https://www.linkydash.com/${relativePath}`;
                 console.log(absoluteURL);
                 
                 await axios.post(
