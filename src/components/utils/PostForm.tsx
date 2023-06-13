@@ -7,6 +7,7 @@ import { setPosts } from '@/redux/reducers/posts';
 export default function PostForm() {
     const [fileUrl, setFileUrl] = useState('');
     const [postType, setPostType] = useState('image');
+    const [text, setText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -20,10 +21,14 @@ export default function PostForm() {
         setFileUrl(event.target.value);
     };
 
+    const handleTextChange = (event: any) => {
+        setText(event.target.value);
+    };
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        if (fileUrl && !isLoading) {
+        if (!isLoading) {
             setIsLoading(true);
             try {
                 // Upload the image and post to Facebook API in a single request
@@ -31,7 +36,7 @@ export default function PostForm() {
                     headers: {
                         fileurl: fileUrl,
                         pageid: page.id,
-                        type: postType,
+                        text: text,
                     },
                 });
 
@@ -64,7 +69,17 @@ export default function PostForm() {
     }
 
     return (
-        <div>
+        <div >
+            {
+                page.picture?
+                <div className='flex p-5 mb-10'>
+                    <Image width={50}  height={50} alt='page-profile-image' src={page.picture} className='rounded-full border'/>
+                    <h1 className='flex flex-col justify-center pl-5 text-xl font-medium'>{page.name}</h1>
+                </div>
+                :
+                ''
+            }
+
             <div className='flex justify-between p-3 w-10/12 mx-auto'>
                 <div className='w-1/3 flex flex-col justify-center m-2 p-1 rounded-xl border-2 bg-white border-blue-600 cursor-pointer'>
                 <Image src={'/Meta-Logo.png'} width={160} height={90} alt='' className='mx-auto'/>
@@ -86,14 +101,16 @@ export default function PostForm() {
                 <div className='flex flex-col mx-8'>
                     <label className='pl-2'>Media URL</label>
                     <input value={fileUrl} required type="text" onChange={handleFileChange} className='m-3 w-1/2 rounded-md border mt-1 h-8 pl-2'/>
+                    <label className='pl-2'>Post Text</label>
+                    <textarea value={text} onChange={handleTextChange} className='m-3 rounded-md border mt-1 h-8 pl-2 max-h-72'/>
                 </div>
                 :
                 <div className='flex flex-col mx-8'>
                     <label className='pl-2'>Post Text</label>
-                    <textarea value={fileUrl} required onChange={handleFileChange} className='m-3 rounded-md border mt-1 h-8 pl-2 max-h-72'/>
+                    <textarea value={text} required onChange={handleTextChange} className='m-3 rounded-md border mt-1 h-8 pl-2 max-h-72'/>
                 </div>         
             }
-            <button disabled={isLoading} type="submit" className={`bg-red-500 hover:bg-red-600 text-white font-semibold p-3 rounded-lg w-1/3 mx-auto mt-5 ${isLoading? 'bg-red-200 hover:bg-red-200 cursor-not-allowed':''}`}>
+            <button disabled={isLoading} type="submit" className={` text-white font-semibold p-3 rounded-lg w-1/3 mx-auto mt-5 ${isLoading? 'bg-red-200 hover:bg-red-200 cursor-not-allowed':'bg-red-500 hover:bg-red-600'}`}>
                 {isLoading ? 'Uploading...' : 'Upload and Post'}
             </button>
             </form>

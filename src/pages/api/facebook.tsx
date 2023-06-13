@@ -41,14 +41,23 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
     }
 
     if (req.method === 'POST') {
-        const {fileurl, pageid, type} = req.headers as { [key: string]: string };
+        const {fileurl, pageid, text} = req.headers as { [key: string]: string };
         const cursor = await dbClient.getUser(user.sub);
         const dbUser = cursor[0];
         const page = dbUser.facebookApi.pages.filter((el: any) => el.id === pageid)
         const token = page[0].access_token
         console.log(fileurl, pageid);
 
-        if (type === 'image') {
+        if (fileurl && text) {
+            await axios.post(
+            `https://graph.facebook.com/v17.0/${pageid}/photos?url=${fileurl}&message=${text}&access_token=${token}`
+            ).then(function (response:{data: any}) {
+                res.status(200).json({ success: true });
+            }).catch(function (error: {}) {
+                console.log(error);
+                res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
+            })
+        } else if (fileurl) {
             await axios.post(
             `https://graph.facebook.com/v17.0/${pageid}/photos?url=${fileurl}&access_token=${token}`
             ).then(function (response:{data: any}) {
@@ -57,9 +66,9 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
                 console.log(error);
                 res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
             })
-        } else {
+        } else if (text){
             await axios.post(
-            `https://graph.facebook.com/v17.0/${pageid}/feed?message=${fileurl}&access_token=${token}`
+            `https://graph.facebook.com/v17.0/${pageid}/feed?message=${text}&access_token=${token}`
             ).then(function (response:{data: any}) {
                 res.status(200).json({ success: true });
             }).catch(function (error: {}) {
