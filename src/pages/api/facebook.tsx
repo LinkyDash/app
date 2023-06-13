@@ -13,11 +13,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-export const config = {
+/* export const config = {
     api: {
         bodyParser: false
     }
-};
+}; */
 
 export default withApiAuthRequired(async function myApiRoute(req: any, res) {
   // @ts-ignore
