@@ -8,7 +8,7 @@ const multer  = require('multer')
 
 const storage = multer.diskStorage({
     destination: './public/uploads/',
-    filename: (req, file, cb) => cb(null, file.originalname),
+    filename: (_req: any, file: any, cb: any) => cb(null, file.originalname),
 });
 
 const upload = multer({ storage });
@@ -19,7 +19,7 @@ export const config = {
     }
 };
 
-export default withApiAuthRequired(async function myApiRoute(req, res) {
+export default withApiAuthRequired(async function myApiRoute(req: any, res) {
   // @ts-ignore
     const { user } = await getSession(req, res);
 
