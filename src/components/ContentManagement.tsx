@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import CmDropDown from './utils/CmDropDown';
 import axios from 'axios';
 import { setPage, endPageRequest } from '@/redux/reducers/page';
+import { setPosts } from '@/redux/reducers/posts';
 import Image from 'next/image';
 import PostForm from './utils/PostForm';
 
 export default function FacebookTab() {
 
   // React states
-  const [posts, setPosts] = useState({posts: []})
   const [reload, setReload] = useState({})
   // React states
 
@@ -19,6 +19,7 @@ export default function FacebookTab() {
   const tab = useSelector((state: {tab: any}) => state.tab);
   const page = useSelector((state: {page: any}) => state.page);
   const time = useSelector((state: {time: any}) => state.time);
+  const posts = useSelector((state: {posts: any}) => state.posts);
   // Redux States
 
     useEffect(() => {
@@ -29,7 +30,7 @@ export default function FacebookTab() {
     if (page.name) {
       axios.get('/api/facebook', { headers })
         .then(function (response:{data: any}) {
-          setPosts(response.data);
+          dispatch(setPosts(response.data.posts));
         })
         .catch(function (error: {}) {
           console.log(error);
@@ -55,13 +56,13 @@ export default function FacebookTab() {
       <div className={page.status? 'm-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5':'m-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden'}>
         <CmDropDown />
         <div className='flex justify-around'>
-          <div className='w-1/2 m-5 p-2 bg-white shadow-2xl  rounded-xl'>
+          <div className='w-1/3 m-5 p-2 bg-white shadow-2xl  rounded-xl'>
             <PostForm />
           </div>
           <div className='w-1/2 m-5 p-2 bg-white shadow-2xl rounded-xl max-h-200 '>
             <div className="overflow-auto h-costume">
               <div className="flex flex-wrap">
-                {posts.posts.map((el: { id: string, full_picture: string, updated_time:string, message: string }) => {
+                {posts.map((el: { id: string, full_picture: string, updated_time:string, message: string }) => {
                   const strDate = el.updated_time;
                   const date = new Date(strDate)
                   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};

@@ -7,6 +7,7 @@ import pagesReducer from './reducers/pages';
 import timeReducer from './reducers/time';
 import dbUserReducer from './reducers/dbUser';
 import pageReducer from './reducers/page';
+import postsReducer from './reducers/posts';
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     time: timeReducer,
     dbUser: dbUserReducer,
     page: pageReducer,
+    posts: postsReducer,
   },
 });
