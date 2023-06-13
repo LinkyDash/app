@@ -11,7 +11,12 @@ export default function Home() {
   const dispatch = useDispatch();
 
   // React states
-  const [insight, setInsight] = useState({})
+  const [insight, setInsight] = useState({
+    messages: null,
+    comments: null,
+    posts: null,
+    impressions: null,
+  })
   const [reload, setReload] = useState({})
   // React states
 

@@ -9,7 +9,7 @@ export default withApiAuthRequired(async function myApiRoute(req, res) {
     if (req.method === 'GET') {
         const axios = require('axios');
         const url = 'https://graph.facebook.com/v17.0'
-        const {pageid, time} = req.headers;
+        const {pageid, time} = req.headers as { [key: string]: string };
         const cursor = await dbClient.getUser(user.sub)
 
         if (cursor) {

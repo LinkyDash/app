@@ -58,10 +58,10 @@ export default function FacebookTab() {
           <div className='w-1/2 m-5 p-2 bg-white shadow-2xl rounded-xl max-h-200 '>
             <div className="overflow-auto h-costume">
               <div className="flex flex-wrap">
-                {posts.posts.map((el: { id: string, full_picture: string }) => {
+                {posts.posts.map((el: { id: string, full_picture: string, updated_time:string, message: string }) => {
                   const strDate = el.updated_time;
                   const date = new Date(strDate)
-                  const options = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};
+                  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};
                   const formattedDate = date.toLocaleString('en-US', options);
                   return (
                     <div key={el.id} className="p-2 rounded-xl bg-looksLikeWhite m-2 w-5/10.5 shadow-lg">
