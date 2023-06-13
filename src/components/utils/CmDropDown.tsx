@@ -9,7 +9,7 @@ const inter = Inter({
     subsets: ['latin']
 });
 
-export default function DropDowns() {
+export default function CmDropDowns() {
 
     const pages = useSelector((state: {pages: any}) => state.pages);
     const page = useSelector((state: {page: any}) => state.page);
@@ -32,7 +32,7 @@ export default function DropDowns() {
 
 
     return (
-    <div className={`${inter.className} visible flex justify-between m-5`}>
+    <div className={`${inter.className} visible flex flex-start m-5`}>
         <div className=''>
             <div className="relative w-full lg:max-w-sm">
                     <select
@@ -51,7 +51,7 @@ export default function DropDowns() {
                 </select>
             </div>
         </div>
-        <div className=''>
+        {/* <div className=''>
             <div className="relative w-full lg:max-w-sm">
                     <select
                         className="w-full p-3 font-medium text-gray-800 border rounded-xl shadow-xl focus:border-purple-800 cursor-pointer bg-looksLikeWhite"
@@ -65,7 +65,7 @@ export default function DropDowns() {
                     <option value="90days">Past 90 Days</option>
                 </select>
             </div>
-        </div>
+        </div> */}
     </div>
     )
 }

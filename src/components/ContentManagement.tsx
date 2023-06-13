@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import DropDowns from './utils/DropDowns';
+import CmDropDown from './utils/CmDropDown';
 import axios from 'axios';
 import { setPage, endPageRequest } from '@/redux/reducers/page';
 import Image from 'next/image';
+import PostForm from './utils/PostForm';
 
 export default function FacebookTab() {
 
@@ -52,9 +53,11 @@ export default function FacebookTab() {
         </div>
       </div>
       <div className={page.status? 'm-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5':'m-5 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden'}>
-        <DropDowns />
+        <CmDropDown />
         <div className='flex justify-around'>
-          <div className='w-1/2 m-5 p-2 bg-white shadow-2xl  rounded-xl'>hello</div>
+          <div className='w-1/2 m-5 p-2 bg-white shadow-2xl  rounded-xl'>
+            <PostForm />
+          </div>
           <div className='w-1/2 m-5 p-2 bg-white shadow-2xl rounded-xl max-h-200 '>
             <div className="overflow-auto h-costume">
               <div className="flex flex-wrap">

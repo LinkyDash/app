@@ -63,34 +63,34 @@ export default function Home() {
         <DropDowns />
         <div className='p-2'>
           <div className='flex justify-around mb-8'>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Messages</h1>
+            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/6'>
+              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-400'>Messages</h1>
               <h1 className='text-center text-2xl font-bold p-5'>{insight.messages}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
+              <h1 className='text-center text-md font-medium mb-8'>The total number of messages received</h1>
 
             </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Comments</h1>
+            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/6'>
+              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-400'>Comments</h1>
               <h1 className='text-center text-2xl font-bold p-5'>{insight.comments}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
+              <h1 className='text-center text-md font-medium mb-8'>The total number of comments received</h1>
 
             </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>New Posts</h1>
+            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/6'>
+              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-400'>New Posts</h1>
               <h1 className='text-center text-2xl font-bold p-5'>{insight.posts}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
+              <h1 className='text-center text-md font-medium mb-8'>The total number of posted posts</h1>
 
             </div>
-            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/5'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Impressions</h1>
+            <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/6'>
+              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-400'>Impressions</h1>
               <h1 className='text-center text-2xl font-bold p-5'>{insight.impressions}</h1>
-              {/* <h1 className='text-center text-lg font-small mb-8'>Previews Period {0}</h1> */}
+              <h1 className='text-center text-md font-medium mb-8'>The total number of impressions</h1>
 
             </div>
           </div>
           <div className='flex'>
             <div className='m-2 p-2 rounded-lg bg-looksLikeWhite shadow-xl w-1/2'>
-              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-800'>Audience Sentiment Status</h1>
+              <h1 className='text-left font-medium text-xl w-full border-b-2 p-2 border-gray-400'>Audience Sentiment Status</h1>
               <div className='m-5 p-5 rounded-lg bg-white text-center h-52'>No Data Available</div>
             </div>
           </div>
