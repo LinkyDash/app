@@ -163,7 +163,7 @@ export default function AccountManagement() {
               pages.status === true?
                 pages.data.map(
                   (el: any) => {
-                    return  <div className='p-3 rounded-xl bg-white m-2' key={pages.data.indexOf(el)}>
+                    return  <div className='p-3 rounded-xl bg-white m-2 shadow-[inset_0_4px_4px_rgba(0.1,0.1,0.1,0.1)] ' key={pages.data.indexOf(el)}>
                             <Image src={el.picture} alt='page-profile-picture' width={50} height={50} className='rounded-full border-gray-700 border mx-auto' />
                             <a href={el.link} target='a_blank'>
                               <h1 className='font-medium text-xl text-center'>{el.name}</h1>
@@ -184,7 +184,7 @@ export default function AccountManagement() {
               <Image src={`${user?.picture}`} width={100} height={100} alt='profile-picture' className='mx-auto rounded-full mb-5'/>
               <div className='p-2 rounded-xl border bg-white'>
                 <label className='block text-gray-800 font-semibold text-xl'>Id:</label>
-                <h1 className='mb-2 px-4 '> {user?.sub}</h1>
+                <h1 className='mb-2 px-4 text-sm'> {user?.sub}</h1>
 
                 <label className='block text-gray-800  font-semibold text-xl'>User Type</label>
                 <h1 className='mb-2 px-4'>Admin</h1>

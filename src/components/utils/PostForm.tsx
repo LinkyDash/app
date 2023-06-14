@@ -5,10 +5,15 @@ import Image from 'next/image';
 import { setPosts } from '@/redux/reducers/posts';
 
 export default function PostForm() {
+
+    // React States
     const [fileUrl, setFileUrl] = useState('');
     const [postType, setPostType] = useState('image');
     const [text, setText] = useState('');
+    const [date, setDate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isDateRequired, setIsDateRequired] = useState(false);
+    // React States
 
     const dispatch = useDispatch();
 
@@ -21,8 +26,31 @@ export default function PostForm() {
         setFileUrl(event.target.value);
     };
 
+    function getCurrentDateTime() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let mth = currentDate.getMonth() + 1;
+    let dy = currentDate.getDate();
+    let hr = currentDate.getHours();
+    let mt = currentDate.getMinutes();
+
+    // Format month, day, hour, and minute to have leading zeros if necessary
+    const month = mth.toString().padStart(2, '0');
+    const day = dy.toString().padStart(2, '0');
+    const hour = hr.toString().padStart(2, '0');
+    const minute = mt.toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hour}:${minute}`;
+    }
+
     const handleTextChange = (event: any) => {
         setText(event.target.value);
+    };
+
+    const handleDateChange = (event: any) => {
+        setDate(event.target.value);
+        console.log(event.target.value);
+        
     };
 
     const handleSubmit = async (event: any) => {
@@ -37,10 +65,14 @@ export default function PostForm() {
                         fileurl: fileUrl,
                         pageid: page.id,
                         text: text,
+                        scheduledate: date,
                     },
                 });
 
                 setFileUrl('')
+                setText('')
+                setDate('')
+                setIsDateRequired(false)
                 setIsLoading(false);
 
                 const headers = {
@@ -57,6 +89,9 @@ export default function PostForm() {
                     })
             } catch (error) {
                 setFileUrl('')
+                setText('')
+                setDate('')
+                setIsDateRequired(false)
                 setIsLoading(false);
                 alert("Invalid Media Url")
                 console.error('Error uploading post', error);
@@ -68,11 +103,15 @@ export default function PostForm() {
         setPostType(event.target.value)
     }
 
+const handleCheckboxChange = (event: any) => {
+    setIsDateRequired(event.target.checked);
+};
+
     return (
         <div >
             {
                 page.picture?
-                <div className='flex p-5 mb-10'>
+                <div className='flex p-5 mb-2'>
                     <Image width={50}  height={50} alt='page-profile-image' src={page.picture} className='rounded-full border'/>
                     <h1 className='flex flex-col justify-center pl-5 text-xl font-medium'>{page.name}</h1>
                 </div>
@@ -108,10 +147,23 @@ export default function PostForm() {
                 <div className='flex flex-col mx-8'>
                     <label className='pl-2'>Post Text</label>
                     <textarea value={text} required onChange={handleTextChange} className='m-3 rounded-md border mt-1 h-8 pl-2 max-h-72'/>
-                </div>         
+                    <div className='border p-2 rounded-xl'>
+                    <label className='block'>
+                        <input
+                        type="checkbox"
+                        checked={isDateRequired}
+                        onChange={handleCheckboxChange}
+                        className='mr-2 mb-3'
+                        />
+                        Schedule Post
+                    </label>
+                        <input className={!isDateRequired? 'bg-looksLikeWhite p-1 rounded-md opacity-40' : 'bg-looksLikeWhite p-1 rounded-md'} disabled={!isDateRequired} value={date || ''} required={isDateRequired} min={getCurrentDateTime()} onChange={handleDateChange} type="datetime-local" />
+                    </div>  
+                </div>
             }
-            <button disabled={isLoading} type="submit" className={` text-white font-semibold p-3 rounded-lg w-1/3 mx-auto mt-5 ${isLoading? 'bg-red-200 hover:bg-red-200 cursor-not-allowed':'bg-red-500 hover:bg-red-600'}`}>
-                {isLoading ? 'Uploading...' : 'Upload and Post'}
+
+            <button disabled={isLoading} type="submit" className={` text-white font-semibold p-3 rounded-lg w-1/3 mx-auto mt-5 ${isLoading? 'bg-red-200 hover:bg-red-200 cursor-not-allowed':'bg-green-600 hover:bg-green-700'}`}>
+                {isLoading ? 'Processing...' : 'Post'}
             </button>
             </form>
         </div>
