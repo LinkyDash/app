@@ -14,8 +14,9 @@ export default function FacebookTab() {
   // React States
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState({ id: false})
-  const [conversation, setConversation] = useState({id: false, messages: {data: []}})
+  const [conversation, setConversation] = useState({id: false, messages: {data: []}, participants: {data: []}})
   const [messages, setMessages] = useState([])
+  const [message, setMessage] = useState('')
   const [pageData, setPageData] = useState({comments: []})
   const [text, setText] = useState('')
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +60,7 @@ export default function FacebookTab() {
                 setMessages(response.data.messages)
                 setPageData(response.data.pageData.data)
                 setComments(response.data.comments)
+                setConversation(response.data.messages[0])
               })
               .catch(function (error: {}) {
                 console.log(error);
@@ -69,6 +71,46 @@ export default function FacebookTab() {
         })
         .catch((err) => {
           console.log(err);
+        })
+    }
+  }
+
+  const handleMessageSubmit = (event: any) => {
+    if (!isLoading) {
+      event.preventDefault();
+      setIsLoading(true);
+      axios.post('/api/facebook/message', null, {
+            headers: {
+              pageid: page.id,
+              userid: conversation.participants.data[0]['id'],
+              message: message,
+            },
+          })
+        .then((res) => {
+          console.log(res.data)
+          setMessage('')
+          const headers = {
+            pageid: page.id,
+          };
+          if (page.name) {
+            axios.get('/api/facebook/data', { headers })
+              .then(function (response:{data: any}) {
+                console.log(response.data);
+                setMessages(response.data.messages)
+                setPageData(response.data.pageData.data)
+                setComments(response.data.comments)
+                setConversation(response.data.messages[0])
+              })
+              .catch(function (error: {}) {
+                console.log(error);
+                setIsLoading(false)
+              })
+          }
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
         })
     }
   }
@@ -138,9 +180,13 @@ export default function FacebookTab() {
     }
   }
 
-    const handleTextChange = (event: any) => {
-        setText(event.target.value);
-    };
+  const handleTextChange = (event: any) => {
+    setText(event.target.value);
+  };
+
+  const handleMessageChange = (event: any) => {
+    setMessage(event.target.value);
+  };
   //UI functions
 
 
@@ -154,6 +200,7 @@ export default function FacebookTab() {
           setMessages(response.data.messages)
           setPageData(response.data.pageData.data)
           setComments(response.data.comments)
+          setConversation(response.data.messages[0])
         })
         .catch(function (error: {}) {
           console.log(error);
@@ -161,13 +208,14 @@ export default function FacebookTab() {
         }).finally(function () {
           dispatch(endPageRequest());
           setIsLoading(false);
+        }).finally(() => {
         })
     }
   }, [page]);
 
   return (
     <div className={` w-full ${tab.name === 'Facebook'? 'visible' : 'hidden'}`}>
-      <div className={page.status? 'm-4 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden':'m-4 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5'}>
+      <div className={page.status? 'm-2 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5 hidden':'m-2 bg-white rounded-xl mx-auto w-11/12 shadow-xl text-black py-5'}>
         <div role="status" className='flex justify-center'>
           <div>
             <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-red-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -222,7 +270,7 @@ export default function FacebookTab() {
             <div>
               <form onSubmit={handleCommentSubmit} className='w-full flex flex-col'>
                 <label className='text-center font-bold mt-2'> Select a Comment to Reply </label>
-                <textarea value={text} required onChange={handleTextChange} className=' w-10/12  m-3 rounded-xl mx-auto border  h-20 max-h-20'/>
+                <textarea value={text} required onChange={handleTextChange} className=' w-10/12  m-3 rounded-xl mx-auto border shadow-xl h-20 max-h-20'/>
                 <button disabled={isLoading} type="submit" className=' p-2 rounded-xl font-bold bg-blue-400 w-1/2 mx-auto text-white hover:bg-blue-500'>
                   {
                     isLoading === false ? 'Post Reply ' : 'Posting...'
@@ -241,7 +289,9 @@ export default function FacebookTab() {
                   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};
                   const formattedDate = date.toLocaleString('en-US', options);
                   return <div key={el.id} className={`bg-looksLikeWhite p-2 m-2 rounded-lg cursor-pointer `}>
-                    <h1 className='m-2 p-1 bg-white rounded-xl w-fit font-medium'>{formattedDate}</h1>
+                    <a href={el.permalink_url} target='a_blank'>
+                      <h1 className='m-2 p-1 bg-white rounded-xl w-fit font-medium'>{formattedDate}</h1>
+                    </a>
                     <h1 className='m-2 p-2 bg-white rounded-xl shadow-[inset_0_4px_4px_rgba(0.1,0.1,0.1,0.1)]' key={el.id}>{el.message}</h1>
                     <div className='flex bg-white rounded-xl mx-2 border'>
                       <h1 className='mx-2 p-2  w-3/4'>{el.reply}</h1>
@@ -272,8 +322,14 @@ export default function FacebookTab() {
                 }
               </div>
             </div>
-            <textarea className='border'></textarea>
-            <button onClick={() => {console.log(conversation)}}>Log Messages</button>
+            <form onSubmit={handleMessageSubmit} className='flex flex-col'>
+              <textarea value={message} required onChange={handleMessageChange} className='border w-10/12 mx-auto h-20 max-h-20 rounded-xl mt-3 shadow-xl'></textarea>
+              <button disabled={isLoading} type="submit" className=' mt-5 p-2 rounded-xl font-bold bg-blue-400 w-1/2 mx-auto text-white hover:bg-blue-500'>
+                {
+                  isLoading === false ? 'Send' : 'Sending...'
+                }
+              </button>
+            </form>
           </div>
         </div>
       </div>

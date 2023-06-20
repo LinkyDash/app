@@ -70,7 +70,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
                 return res.status(200).json({ success: true });
             }).catch(function (error: {}) {
                 console.log(error);
-                res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
+                return res.status(500).json({ error: 'An error occurred while uploading the post to facebook' });
             })
         } else {
             return res.status(400).json({ error: 'Invalid request' });
@@ -92,8 +92,7 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
             })
         }
     } else {
-    // Handle unsupported HTTP methods
     return res.status(405).json({ error: 'Method Not Allowed' });
-}
+    }
 });
 

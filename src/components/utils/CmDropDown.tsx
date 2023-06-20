@@ -23,7 +23,7 @@ export default function CmDropDowns() {
 
 
     return (
-    <div className={`${inter.className} visible flex flex-start m-5`}>
+    <div className={`${inter.className} visible flex flex-start m-3 mx-5`}>
         <div className=''>
             <div className="relative w-full lg:max-w-sm">
                     <select
