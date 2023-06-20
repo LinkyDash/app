@@ -26,6 +26,7 @@ module.exports = {
       },
       height: {
         'costume': '640px',
+        'costume2': '500px',
       }
     },
   },

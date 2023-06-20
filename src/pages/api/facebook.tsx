@@ -81,7 +81,6 @@ export default withApiAuthRequired(async function myApiRoute(req: any, res) {
         const dbUser = cursor[0];
         const page = dbUser.facebookApi.pages.filter((el: any) => el.id === pageid)
         const token = page[0].access_token
-        console.log(pageid, postid);
         if (pageid && postid) {
             await axios.delete(
             `https://graph.facebook.com/v17.0/${postid}?access_token=${token}`
