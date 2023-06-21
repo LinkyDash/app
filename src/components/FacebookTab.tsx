@@ -235,7 +235,7 @@ export default function FacebookTab() {
         </div>
         <CmDropDowns />
         <div className={isLoading === false ? 'flex justify-between p-2' : 'flex justify-between p-2  opacity-50 cursor-not-allowed'}>
-          <div className='w-1/3 mx-2  p-2 shadow-xl rounded-xl '>
+          <div className='w-1/3 mx-2  p-2 shadow-xl rounded-xl border'>
             <h1 className='text-center font-bold text-xl'>Latest Comments</h1>
             <div className='h-costume2 overflow-auto'>
               {
@@ -279,7 +279,7 @@ export default function FacebookTab() {
               </form>
             </div>
           </div>
-          <div className='w-1/3 ml-2  p-2 shadow-xl rounded-xl '>
+          <div className='w-1/3 ml-2  p-2 shadow-xl rounded-xl border'>
             <h1 className='text-center font-bold text-xl'>Latest Replies</h1>
             <div className='h-costume2 overflow-auto'>
               {
@@ -302,7 +302,7 @@ export default function FacebookTab() {
               }
             </div>
           </div>
-          <div className='w-1/2 mx-2  p-2 shadow-xl rounded-xl '>
+          <div className='w-1/2 mx-2  p-2 shadow-xl rounded-xl border'>
             <h1 className='text-center font-bold text-xl'>Conversations</h1>
             <div className='flex h-costume2 overflow-auto'>
               <div className=' w-1/3 overflow-scroll rounded-xl border-r-2'>
@@ -312,6 +312,7 @@ export default function FacebookTab() {
               </div>
               <div className='w-2/3 flex flex-col-reverse overflow-scroll rounded-xl'>
                 {
+                  conversation?
                   conversation.messages.data.map((el:any) =>{
                     return <h1
                     className={`${el.from.name === page.name? 'text-right self-end bg-blue-400' : 'text-left self-start bg-red-300'} w-1/2 p-2 m-2 text-white font-medium rounded-xl shadow-xl`}
@@ -319,6 +320,8 @@ export default function FacebookTab() {
                     {el.message}
                     </h1>
                   })
+                  :
+                  <></>
                 }
               </div>
             </div>
