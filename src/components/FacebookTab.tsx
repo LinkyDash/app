@@ -248,7 +248,7 @@ export default function FacebookTab() {
             </svg>
         </div>
         <CmDropDowns />
-        <div className={isLoading === false ? 'flex justify-between p-2' : 'flex justify-between p-2  opacity-50 cursor-not-allowed'}>
+        <div className={isLoading === false ? 'flex justify-between p-1' : 'flex justify-between p-1  opacity-50 cursor-not-allowed'}>
           <div className='w-1/3 mx-2  p-2 shadow-xl rounded-xl border'>
             <h1 className='text-center font-bold text-xl'>Latest Comments</h1>
             <div className='h-costume2 overflow-auto'>
