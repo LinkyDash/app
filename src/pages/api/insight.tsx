@@ -29,12 +29,21 @@ export default withApiAuthRequired(async function myApiRoute(req, res) {
                 const commentsRes = await axios.get(
                     `${url}/${pageid}/posts?fields=comments{created_time}&access_token=${token}`
                 );
+
                 const postsRes = await axios.get(
                     `${url}/${pageid}/posts?&access_token=${token}&since=${start}&until=${end}`
                 );
+
                 const messagesRes = await axios.get(
                     `${url}/${pageid}/conversations?&access_token=${token}`
                 );
+
+                const dbDataCursor = await dbClient.getData(user.sub)
+                const dbData = dbDataCursor[0]
+                const pageData = dbData.pages.find((el: {id: string}) => el.id === pageid )
+                const dbComments = pageData.data.comments;
+                const sentiments = dbComments.map((comment: any) => comment.sentiment);
+
                 const comments = commentsRes.data.data.reduce((total: any, item: any) => {
                     if (item.comments && item.comments.data) {
                         const filteredComments = item.comments.data.filter((comment: any) => {
@@ -45,17 +54,20 @@ export default withApiAuthRequired(async function myApiRoute(req, res) {
                 }
                 return total;
                 }, 0);
+
                 const impressions = impressionsRes.data.data.reduce(
                 (total: any, el: any) => total + el.values.reduce((sum: any, val: any) => sum + val.value, 0),
                 0
                 );
+
                 const messages = messagesRes.data.data.filter(( el: any) => {
                     const messageTime = Math.floor(new Date(el.updated_time).getTime() / 1000);
                     return messageTime >= start && messageTime <= end;
                 });
+
                 const posts = postsRes.data.data.length
 
-                res.status(200).json({ impressions, comments, posts, messages: messages.length });
+                res.status(200).json({ impressions, comments, posts, messages: messages.length, sentiments });
             } else {
                 res.status(500).json({ error: 'An error occurred getting the user' });
             }

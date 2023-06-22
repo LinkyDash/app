@@ -9,7 +9,7 @@ export default withApiAuthRequired(async function myApiRoute(req, res) {
         const axios = require('axios');
 
         if (req.method === 'POST') {
-        const { pageid, comment, message } = req.headers as { [key: string]: string };
+        const { pageid, comment, message, sentiment } = req.headers as { [key: string]: string };
         const cursor = await dbClient.getUser(user.sub);
 
         if (cursor) {
@@ -24,7 +24,7 @@ export default withApiAuthRequired(async function myApiRoute(req, res) {
             ...commentObj,
             replyid: response.data.id,
             reply: message,
-            sentiment: 0
+            sentiment: Number(sentiment)
             };
             const dbAdd = await dbClient.addComment(user.sub, pageid, data);
 

@@ -17,6 +17,7 @@ export default function FacebookTab() {
   const [conversation, setConversation] = useState({id: false, messages: {data: []}, participants: {data: []}})
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
+  const [sentiment, setSentiment] = useState('0')
   const [pageData, setPageData] = useState({comments: []})
   const [text, setText] = useState('')
   const [isLoading, setIsLoading] = useState(false);
@@ -40,11 +41,19 @@ export default function FacebookTab() {
     event.preventDefault();
     if (!isLoading) {
       setIsLoading(true);
+      console.log({
+              pageid: page.id,
+              comment: JSON.stringify(comment),
+              message: text,
+              sentiment: sentiment,
+            });
+      
       axios.post('/api/facebook/comments', null, {
             headers: {
               pageid: page.id,
               comment: JSON.stringify(comment),
               message: text,
+              sentiment: sentiment,
             },
           })
         .then((res) => {
@@ -115,6 +124,10 @@ export default function FacebookTab() {
     }
   }
 
+  const handleSentimentClick = (val: string) => {
+    setSentiment(val)
+  }
+
   const handleLike = (bool: boolean, id: string) => {
     console.log({bool, id});
     if (!isLoading) {
@@ -177,6 +190,7 @@ export default function FacebookTab() {
           console.log(err);
           setIsLoading(false)
         })
+      setIsLoading(false)
     }
   }
 
@@ -239,12 +253,18 @@ export default function FacebookTab() {
             <h1 className='text-center font-bold text-xl'>Latest Comments</h1>
             <div className='h-costume2 overflow-auto'>
               {
-                comments.map((el: any) => {
-                  return el.comments.data.map((ell: any) => {
+                comments
+                  .flatMap((el: any) => el.comments.data)
+                  .sort((a: any, b: any) => {
+                    const dateA: any = new Date(a.created_time);
+                    const dateB: any = new Date(b.created_time);
+                    return dateB - dateA;
+                  })
+                  .map((ell: any) => {
                     const existingComment = pageData.comments.find((elll: any) => ell.id === elll.id);
                     const strDate = ell.created_time;
-                    const date = new Date(strDate)
-                    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false};
+                    const date = new Date(strDate);
+                    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false };
                     const formattedDate = date.toLocaleString('en-US', options);
                     if (existingComment) {
                       return null;
@@ -255,7 +275,7 @@ export default function FacebookTab() {
                             <a target='a_blank' href={ell.permalink_url}>
                               <h1 className='text-left may-5 font-semibold text-sm rounded-xl bg-white p-2'>{formattedDate}</h1>
                             </a>
-                            <button className={ell.user_likes === false ? 'p-2  rounded-xl bg-gray-400 my-4 hover:bg-gray-500 text-white font-bold' : 'p-2 rounded-xl bg-blue-500 my-4 hover:bg-red-600 text-white font-bold' }  onClick={() => { handleLike(ell.user_likes, ell.id) }}>
+                            <button className={ell.user_likes === false ? 'p-2  rounded-xl bg-gray-400 my-4 hover:bg-gray-500 text-white font-bold' : 'p-2 rounded-xl bg-blue-500 my-4 hover:bg-red-600 text-white font-bold'} onClick={() => { handleLike(ell.user_likes, ell.id) }}>
                               {ell.user_likes === false ? "Like" : "Liked"}
                             </button>
                           </div>
@@ -263,14 +283,20 @@ export default function FacebookTab() {
                         </div>
                       );
                     }
-                  });
-                })
+                  })
               }
             </div>
             <div>
               <form onSubmit={handleCommentSubmit} className='w-full flex flex-col'>
                 <label className='text-center font-bold mt-2'> Select a Comment to Reply </label>
-                <textarea value={text} required onChange={handleTextChange} className=' w-10/12  m-3 rounded-xl mx-auto border shadow-xl h-20 max-h-20'/>
+                <div className='flex justify-around'>
+                  <textarea value={text} required onChange={handleTextChange} className=' w-1/2 my-3 rounded-xl mx-auto border shadow-xl h-20 max-h-20'/>
+                  <div className='w-1/2 flex flex-col justify-center'>
+                    <h1 onClick={() => {handleSentimentClick('-1')}} className={`${sentiment === '-1'? 'border-blue-500 border-2 bg-red-600' : ''} text-center text-white font-bold bg-red-400 border rounded-xl w-10/12 m-1  mx-auto cursor-pointer`}>Negative</h1>
+                    <h1 onClick={() => {handleSentimentClick('0')}} className={`${sentiment === '0'? 'border-blue-500 border-2 bg-gray-500' : ''} text-center text-white font-bold bg-gray-400 border rounded-xl w-10/12 m-1  mx-auto cursor-pointer`}>Neutral</h1>
+                    <h1 onClick={() => {handleSentimentClick('1')}} className={`${sentiment === '1'? 'border-blue-500 border-2 bg-emerald-600' : ''} text-center text-white font-bold bg-emerald-300 border rounded-xl w-10/12 m-1  mx-auto cursor-pointer`}>Positive</h1>
+                  </div>
+                </div>
                 <button disabled={isLoading} type="submit" className=' p-2 rounded-xl font-bold bg-blue-400 w-1/2 mx-auto text-white hover:bg-blue-500'>
                   {
                     isLoading === false ? 'Post Reply ' : 'Posting...'
@@ -281,7 +307,7 @@ export default function FacebookTab() {
           </div>
           <div className='w-1/3 ml-2  p-2 shadow-xl rounded-xl border'>
             <h1 className='text-center font-bold text-xl'>Latest Replies</h1>
-            <div className='h-costume2 overflow-auto'>
+            <div className='h-costume3 flex flex-col overflow-auto'>
               {
                 pageData.comments.map((el: any) => {
                   const strDate = el.created_time;
