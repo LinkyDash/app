@@ -1,4 +1,8 @@
-# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LinkyDash
+Linkydash is an online platform that allows users to link their social media accounts and manage them from one single place.
+
+## Full Project structure and presentation
+[Presentation](https://docs.google.com/presentation/d/1yMgAi6zapF8BRMy_p3sSSs6TBnxmZAgCe-BSRzuna7E/edit?usp=sharing)
 
 ## Getting Started
 
